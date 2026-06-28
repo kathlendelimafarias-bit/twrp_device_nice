@@ -1,0 +1,59 @@
+# Dynamic Logical Partitions (Mapped for Visibility and Backup)
+/system         ext4    system                                     flags=display="System";backup=1;logical;slotselect
+/vendor         ext4    vendor                                     flags=display="Vendor";backup=1;logical;slotselect
+/product        ext4    product                                    flags=display="Product";backup=1;logical;slotselect
+/system_ext     ext4    system_ext                                 flags=display="System EXT";backup=1;logical;slotselect
+
+# Cores and Metadata
+/metadata       ext4      /dev/block/by-name/metadata              flags=display="Metadata";backup=1
+/data           f2fs      /dev/block/by-name/userdata              flags=fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized,keydirectory=/metadata/vold/metadata_encryption
+/cache          ext4      /dev/block/by-name/rescue                flags=display="Cache";wipeingui;wipeduringfactoryreset
+
+# Flash Images and Boot 
+/boot           emmc      /dev/block/by-name/boot                  flags=display="Boot";slotselect;backup=1;flashimg=1
+/init_boot      emmc      /dev/block/by-name/init_boot             flags=display="Init Boot";slotselect;backup=1;flashimg=1
+/vendor_boot    emmc      /dev/block/by-name/vendor_boot           flags=display="Vendor Boot";slotselect;backup=1;flashimg=1
+/dtbo           emmc      /dev/block/by-name/dtbo                  flags=display="DTBO";slotselect;backup=1;flashimg=1
+/vbmeta         emmc      /dev/block/by-name/vbmeta                flags=display="VBMeta";slotselect;backup=1;flashimg=1
+/vbmeta_system  emmc      /dev/block/by-name/vbmeta_system         flags=display="VBMeta System";slotselect;backup=1;flashimg=1
+/vbmeta_vendor  emmc      /dev/block/by-name/vbmeta_vendor         flags=display="VBMeta Vendor";slotselect;backup=1;flashimg=1
+/logo           emmc      /dev/block/by-name/logo                  flags=display="Logo";backup=1;flashimg=1
+/misc           emmc      /dev/block/by-name/misc                  flags=display="Misc"
+
+# Persistent Factory Storage
+/persist        ext4      /dev/block/by-name/persist               flags=display="Persist"
+/persist_image  emmc      /dev/block/by-name/persist               flags=display="Persist Image";backup=1;flashimg=1
+
+# Hardware Calibration and Safety (IMEI/NVRAM)
+/nvram          emmc      /dev/block/by-name/nvram                 flags=display="NVRAM";backup=1
+/nvdata         ext4      /dev/block/by-name/nvdata                flags=display="NVData";backup=1;subpartitionof=/nvram
+/nvcfg          ext4      /dev/block/by-name/nvcfg                 flags=display="NVCfg";backup=1;subpartitionof=/nvram
+/protect_f     ext4      /dev/block/by-name/protect1            flags=display="Protect F";subpartitionof=/nvram
+/protect_s   ext4      /dev/block/by-name/protect2            flags=display="Protect S";subpartitionof=/nvram
+/proinfo        emmc      /dev/block/by-name/proinfo               flags=display="Proinfo";backup=1
+
+# Processor and Radio Firmwares (Radio/Security Subdivisions)
+/para           emmc      /dev/block/by-name/para                  flags=display="Para"
+/boot_para      emmc      /dev/block/by-name/boot_para             flags=display="Boot Para"
+/audio_dsp      emmc      /dev/block/by-name/audio_dsp             flags=display="Audio DSP"
+/otp            emmc      /dev/block/by-name/otp                   flags=display="OTP"
+/persistent     emmc      /dev/block/by-name/frp                   flags=display="FRP (Google Lock)"
+/seccfg         emmc      /dev/block/by-name/seccfg                flags=display="Seccfg"
+/expdb          emmc      /dev/block/by-name/expdb                 flags=display="Expdb"
+
+# Firmware Modems e Motores do SoC (Managed by Slot)
+/lk             emmc      /dev/block/by-name/lk1                   flags=display="Bootloader (LK)";slotselect;backup=1
+/tee            emmc      /dev/block/by-name/tee1                  flags=display="TEE (Trustonic)";slotselect;backup=1
+/gz             emmc      /dev/block/by-name/gz1                   flags=display="GZ Hardware";slotselect
+/mcupm          emmc      /dev/block/by-name/mcupm1                flags=display="MCUPM";slotselect
+/scp            emmc      /dev/block/by-name/scp1                  flags=display="SCP Core";slotselect
+/sspm           emmc      /dev/block/by-name/sspm1                 flags=display="SSPM Core";slotselect
+/dpm            emmc      /dev/block/by-name/dpm1                  flags=display="DPM Dynamic";slotselect
+/md1img         emmc      /dev/block/by-name/md1img                flags=display="Modem Firmware (MD1)";slotselect;backup=1
+/md1dsp         emmc      /dev/block/by-name/md1dsp                flags=display="Modem DSP";slotselect
+/spmfw          emmc      /dev/block/by-name/spmfw                 flags=display="SPM Firmware";slotselect
+/pi_img         emmc      /dev/block/by-name/pi_img                flags=display="PI Image";slotselect
+
+# Removable External Storage
+/external_sd    vfat      /dev/block/mmcblk0p1  /dev/block/mmcblk0 flags=display="MicroSD Card";storage;wipeingui;removable
+/usb_otg        vfat      /dev/block/sda1       /dev/block/sda     flags=display="USB OTG";storage;wipeingui;removable
