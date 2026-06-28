@@ -10,7 +10,7 @@ This repository contains the TWRP device tree configuration for the **Motorola M
 | CPU | 2x Cortex-A78 @ 2.5 GHz & 6x Cortex-A55 @ 2.0 GHz |
 | GPU | Mali-G615 MC2 |
 | Architecture | arm64-v8a |
-| Screen Resolution | 1080 x 2400 |
+| Screen Resolution | 2712 x 1220 |
 | Storage | UFS |
 | Shipping API | 35 (Android 15) |
 
