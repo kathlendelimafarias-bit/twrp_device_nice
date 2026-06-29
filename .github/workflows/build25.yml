@@ -25,17 +25,6 @@ jobs:
         remove-haskell: 'true'
 
   
-    - name: Instalar Repo e Baixar Código Fonte Mínimo do TWRP
-      run: |
-        mkdir twrp
-        cd twrp
-        git config --global user.name "kathlendelimafarias-bit"
-        git config --global user.email "kathlendelimafarias@gmail.com"
-        curl https://raw.githubusercontent.com > ./repo
-        chmod a+x ./repo
-        python3 ./repo init --depth=1 --repo-url=https://github.com -u https://github.com -b twrp-14.0
-        python3 ./repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
-  
     - name: Baixar Código Fonte Mínimo do TWRP
       run: |
         rm -rf twrp || true
@@ -43,8 +32,15 @@ jobs:
         cd twrp
         git config --global user.name "kathlendelimafarias-bit"
         git config --global user.email "kathlendelimafarias@gmail.com"
-        repo init --depth=1 --repo-url=https://github.com -u https://github.com -b twrp-14.0
-        repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+        
+        # Baixa o script do repo diretamente dentro da pasta de trabalho
+        curl https://githubusercontent.com > ./repo
+        chmod a+x ./repo
+        
+        # Executa a inicialização e o sincronismo chamando o script local via Python 3
+        python3 ./repo init --depth=1 --repo-url=https://github.com -u https://github.com -b twrp-14.0
+        python3 ./repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+        
 
     - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
