@@ -24,8 +24,8 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
 
-    - name: Baixar Ferramenta e Inicializar Manifesto (Tudo Junto)
-      run: |
+    -  name: Baixar Ferramenta e Inicializar Manifesto (Tudo Junto)
+       run: |
         # Instala o utilitário do sistema
         sudo apt-get update && sudo apt-get install -y repo
         
@@ -33,19 +33,15 @@ jobs:
         mkdir -p twrp
         cd twrp
         
-        # Inicializa um repositório Git local limpo para ignorar as regras globais da máquina
+        # Inicializa o ambiente Git local isolado
         git init
         git config --local user.name "kathlendelimafarias-bit"
-        git config --global user.name "kathlendelimafarias-bit"
         git config --local user.email "kathlendelimafarias@gmail.com"
+        git config --global user.name "kathlendelimafarias-bit"
         git config --global user.email "kathlendelimafarias@gmail.com"
         
-        # Sobrescreve agressivamente qualquer bloqueio forçando o HTTPS puro localmente
-        git config --local url."https://github.com".insteadOf "git@github.com:"
-        git config --local url."https://github.com".insteadOf "https://github.com"
-        
-        # Inicializa o manifesto usando a flag de bypass de clonagem para o terminal não se perder
-        repo init --depth=1 --no-repo-verify --repo-url=https://github.comGerritCodeReview/git-repo -u "https://github.comminimal-manifest-twrp/platform_manifest_twrp_aosp.git" -b twrp-14.0
+        # Inicializa o manifesto sem travas de URLs locais
+        repo init --depth=1 --no-repo-verify -u https://github.com -b twrp-14.0
 
 
     - name: Sincronizar Arquivos do Android 14 (Download Longo)
