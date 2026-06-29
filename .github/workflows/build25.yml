@@ -33,7 +33,7 @@ jobs:
         git config --global user.email "kathlendelimafarias@gmail.com"
         
         # Baixa o script com o link oficial corrigido
-        curl https://githubusercontent.com > ./repo
+        curl https://raw.githubusercontent.com > ./repo
         chmod a+x ./repo
         
         # Inicializa o repositório usando o Python direto no script limpo
