@@ -24,22 +24,26 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
 
-    - name: Instalar Repo e Baixar Código Fonte Mínimo do TWRP
+    - name: Instalar Ferramenta Repo Oficial
+      run: |
+        mkdir -p ~/bin
+        curl https://githubusercontent.com > ~/bin/repo
+        chmod a+x ~/bin/repo
+        sudo ln -sf ~/bin/repo /usr/bin/repo
+
+    - name: Baixar Código Fonte Mínimo do TWRP
       run: |
         mkdir twrp
         cd twrp
         git config --global user.name "kathlendelimafarias-bit"
         git config --global user.email "kathlendelimafarias@gmail.com"
-        curl https://raw.githubusercontent.com > ./repo
-        chmod a+x ./repo
-        python3 ./repo init --depth=1 --repo-url=https://github.com -u https://github.com -b twrp-14.0
-        python3 ./repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+        repo init --depth=1 --repo-url=https://github.com -u https://github.com -b twrp-14.0
+        repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
     - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
       with:
-         path: twrp/device/motorola/nice
-        
+        path: twrp/device/motorola/nice
 
     - name: Executar a Compilação (Build)
       run: |
@@ -48,11 +52,9 @@ jobs:
         source build/envsetup.sh
         lunch twrp_nice-eng
         mka recoveryimage -j$(nproc --all)
-        
 
     - name: Salvar o Arquivo .IMG Pronto
       uses: actions/upload-artifact@v4
       with:
         name: TWRP-MotoG86-Nice
         path: twrp/out/target/product/nice/*.img
-        
