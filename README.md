@@ -28,7 +28,7 @@ To initialize your workspace and build this recovery repository, run the followi
 
 ```bash
 # Clone this repository into your build environment
-git clone [https://github.com/YOUR_GITHUB_USERNAME/device_motorola_nice.git](https://github.com/YOUR_GITHUB_USERNAME/device_motorola_nice.git) device/motorola/nice
+git clone [https://github.com/twrp_device_nice/device_motorola_nice.git](https://github.com/twrp_device_nice/device_motorola_nice.git) device/motorola/nice
 
 # Initialize the build environment
 source build/envsetup.sh
