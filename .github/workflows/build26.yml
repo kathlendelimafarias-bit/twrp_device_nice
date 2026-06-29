@@ -24,12 +24,24 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
 
-    - name: Clonar Base de Compilação do TWRP (Android 14)
-      uses: actions/checkout@v4
-      with:
-        repository: 'minimal-manifest-twrp/platform_manifest_twrp_aosp'
-        ref: 'twrp-14'
-        path: 'twrp'
+    - name: Sincronizar Código Fonte do TWRP (Método Oficial Integrado)
+      run: |
+        # Cria a pasta de trabalho limpa
+        mkdir -p twrp
+        cd twrp
+        
+        # Limpa agressivamente QUALQUER configuração global que o GitHub Actions injete
+        rm -f ~/.gitconfig
+        git config --global user.name "kathlendelimafarias-bit"
+        git config --global user.email "kathlendelimafarias@gmail.com"
+        
+        # Baixa a versão oficial e universal do script repo
+        curl -sL https://googleapis.com > ./repo-bin
+        chmod a+x ./repo-bin
+        
+        # Inicializa e força o download completo usando a URL direta do Git-Repo
+        python3 ./repo-bin init --depth=1 --no-repo-verify --repo-url=https://github.com -u https://github.com -b twrp-14
+        python3 ./repo-bin sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
     - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
