@@ -24,26 +24,23 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
 
-    - name: Baixar Código Fonte Mínimo do TWRP (Linha Pura)
+    - name: Baixar Ferramenta Repo do Google
       run: |
-        # Garante um diretório limpo
-        rm -rf twrp || true
-        mkdir twrp
+        mkdir -p ~/bin
+        curl -s https://raw.githubusercontent.com > ~/bin/repo
+        chmod a+x ~/bin/repo
+
+    - name: Inicializar Manifesto do TWRP
+      run: |
+        mkdir -p twrp
         cd twrp
-        
-        # Configura as credenciais globais exigidas pela ferramenta repo
         git config --global user.name "kathlendelimafarias-bit"
         git config --global user.email "kathlendelimafarias@gmail.com"
-        
-        # Cria a pasta de binários locais e baixa o script oficial do Google
-        mkdir -p ~/bin
-        curl https://raw.githubusercontent.com > ~/bin/repo
-        chmod a+x ~/bin/repo
-        
-        # Inicializa o manifesto do TWRP 14 e força o uso do espelho estável do git-repo
         ~/bin/repo init --depth=1 --repo-url=https://github.com -u https://github.com -b twrp-14.0
-        
-        # Inicia a sincronização de todos os gigabytes de arquivos do Android
+
+    - name: Sincronizar Arquivos do Android 14 (Download Longo)
+      run: |
+        cd twrp
         ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
     - name: Clonar a Sua Device Tree
