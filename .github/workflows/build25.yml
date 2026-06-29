@@ -13,7 +13,7 @@ jobs:
     - name: Configurar Ambiente Linux
       run: |
         sudo apt-get update
-        sudo apt-get install -y gperf gcc-multilib g++-multilib libc6-dev libncurses5-dev libncursesw5-dev libx11-dev zlib1g-dev libxml2-utils xsltproc unzip bc bison build-essential ccache curl flex g++ rsync libssl-dev python3
+        sudo apt-get install -y gperf gcc-multilib g++-multilib libc6-dev libncurses5-dev libncursesw5-dev libx11-dev zlib1g-dev libxml2-utils xsltproc unzip bc bison build-essential ccache curl flex g++ rsync libssl-dev python3 wget
 
     - name: Maximizar Espaço em Disco
       uses: easimon/maximize-build-space@v8
@@ -24,30 +24,15 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
 
-    -  name: Baixar Ferramenta e Inicializar Manifesto (Tudo Junto)
-       run: |
-        # Instala o utilitário do sistema
-        sudo apt-get update && sudo apt-get install -y repo
-        
-        # Cria a pasta de trabalho zerada
-        mkdir -p twrp
-        cd twrp
-        
-        # Inicializa o ambiente Git local isolado
-        git init
-        git config --local user.name "kathlendelimafarias-bit"
-        git config --local user.email "kathlendelimafarias@gmail.com"
-        git config --global user.name "kathlendelimafarias-bit"
-        git config --global user.email "kathlendelimafarias@gmail.com"
-        
-        # Inicializa o manifesto sem travas de URLs locais
-        repo init --depth=1 --no-repo-verify -u https://github.com -b twrp-14.0
-
-
-    - name: Sincronizar Arquivos do Android 14 (Download Longo)
+    - name: Baixar Código Fonte do TWRP (Bypass do Repo)
       run: |
-        cd twrp
-        ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+        mkdir -p twrp
+        # Baixa o galho estável do TWRP 14 diretamente em formato ZIP de alta velocidade
+        wget https://github.com -O twrp.zip
+        # Descompacta os arquivos direto na nossa pasta de trabalho
+        unzip -q twrp.zip
+        mv platform_manifest_twrp_aosp-twrp-14.0/* twrp/
+        rm -rf twrp.zip platform_manifest_twrp_aosp-twrp-14.0
 
     - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
@@ -67,3 +52,4 @@ jobs:
       with:
         name: TWRP-MotoG86-Nice
         path: twrp/out/target/product/nice/*.img
+        
