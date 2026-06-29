@@ -1,20 +1,28 @@
     - name: Sincronizar Código Fonte do TWRP (Método Oficial Integrado)
       run: |
         # Garante uma pasta limpa
-        rm -rf twrp || true
-        mkdir twrp
-        cd twrp
         
-        # Reseta as travas do Git e configura a identidade
-        rm -f ~/.gitconfig
+         rm -rf twrp || true
+        
+         mkdir twrp
+         
+         cd twrp
+        
+        # Reseta as travas do Git e configura a identidade     
+        
+                rm -f ~/.gitconfig
+         
         git config --global user.name "kathlendelimafarias-bit"
+          
         git config --global user.email "kathlendelimafarias@gmail.com"
         
-        # Instala a ferramenta repo de forma nativa e infalível via gerenciador do Python
-        pip3 install git-repo
+    # Instala a ferramenta repo de forma nativa e infalível via gerenciador do Python
+     pip3 install git-repo
         
-        # Inicializa o manifesto do TWRP 14 usando o comando instalado pelo Python
+ 
+   # Inicializa o manifesto do TWRP 14 usando o comando instalado pelo Python
         repo init --depth=1 --no-repo-verify --repo-url=https://github.com -u https://github.com -b twrp-14
         
-        # Inicia o download massivo dos arquivos do Android 14
+   # Inicia o download massivo dos arquivos do Android 14
         repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+        
