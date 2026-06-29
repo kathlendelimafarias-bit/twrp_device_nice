@@ -24,30 +24,22 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
 
-    - name: Clonar a Sua Device Tree Automaticamente
+    - name: Baixar Código Fonte do TWRP (Ação Nativa)
+      uses: ammarfaizi2/repo-init-action@main
+      with:
+        manifest_url: 'https://raw.github.com'
+        manifest_branch: 'twrp-14.0'
+        workspace_dir: 'twrp'
+        depth: 1
+
+    - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
       with:
         path: twrp/device/motorola/nice
 
-    - name: Sincronizar Código do TWRP e Compilar (Tudo Junto)
+    - name: Executar a Compilação (Build)
       run: |
-        # Cria a pasta e entra nela
-        mkdir -p twrp
         cd twrp
-        
-        # Configura as credenciais locais do Git
-        git config --global user.name "kathlendelimafarias-bit"
-        git config --global user.email "kathlendelimafarias@gmail.com"
-        
-        # Baixa o script do repo localmente na pasta certa
-        curl https://raw.githubusercontent.com > ./repo
-        chmod a+x ./repo
-        
-        # Inicializa e baixa todos os gigabytes de arquivos do Android 14
-        python3 ./repo init --depth=1 --repo-url=https://github.com -u https://github.com -b twrp-14.0
-        python3 ./repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
-        
-        # Com todos os arquivos na pasta, carrega o ambiente e inicia a compilação real!
         export ALLOW_MISSING_DEPENDENCIES=true
         source build/envsetup.sh
         lunch twrp_nice-eng
