@@ -13,7 +13,7 @@ jobs:
     - name: Configurar Ambiente Linux
       run: |
         sudo apt-get update
-        sudo apt-get install -y gperf gcc-multilib g++-multilib libc6-dev libncurses5-dev libncursesw5-dev libx11-dev zlib1g-dev libxml2-utils xsltproc unzip bc bison build-essential ccache curl flex g++ rsync libssl-dev python3 wget
+        sudo apt-get install -y gperf gcc-multilib g++-multilib libc6-dev libncurses5-dev libncursesw5-dev libx11-dev zlib1g-dev libxml2-utils xsltproc unzip bc bison build-essential ccache curl flex g++ rsync libssl-dev python3 git
 
     - name: Maximizar Espaço em Disco
       uses: easimon/maximize-build-space@v8
@@ -24,15 +24,10 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
 
-    - name: Baixar Código Fonte do TWRP (Bypass do Repo)
+    - name: Clonar Código Fonte do TWRP (Modo Direto)
       run: |
-        mkdir -p twrp
-        # Baixa o galho estável do TWRP 14 diretamente em formato ZIP de alta velocidade
-        wget https://github.com -O twrp.zip
-        # Descompacta os arquivos direto na nossa pasta de trabalho
-        unzip -q twrp.zip
-        mv platform_manifest_twrp_aosp-twrp-14.0/* twrp/
-        rm -rf twrp.zip platform_manifest_twrp_aosp-twrp-14.0
+        # Clonagem direta e rasa da branch estável de ferramentas sem depender de utilitários externos
+        git clone --depth=1 -b twrp-14.0 https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git twrp
 
     - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
