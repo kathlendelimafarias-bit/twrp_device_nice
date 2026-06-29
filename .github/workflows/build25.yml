@@ -27,7 +27,7 @@ jobs:
     - name: Baixar Ferramenta Repo do Google
       run: |
         mkdir -p ~/bin
-        curl -s https://raw.githubusercontent.com > ~/bin/repo
+        curl -s https://githubusercontent.com > ~/bin/repo
         chmod a+x ~/bin/repo
 
     - name: Inicializar Manifesto do TWRP
