@@ -23,15 +23,20 @@ jobs:
         remove-dotnet: 'true'
         remove-android: 'true'
         remove-haskell: 'true'
-      
-    - name: Clonar Código Fonte do TWRP (Modo Direto)
-      run: |
-        git clone --depth=1 -b twrp-14 https://github.com twrp
 
-    - name: Clonar Ferramentas de Build do Android
-      run: |
-        # Baixa os scripts de ambiente oficiais da ramificação do TWRP 14
-        git clone --depth=1 -b twrp-14 https://github.com twrp/build
+    - name: Clonar Código Fonte do TWRP (Ação Oficial)
+      uses: actions/checkout@v4
+      with:
+        repository: 'minimal-manifest-twrp/platform_manifest_twrp_aosp'
+        ref: 'twrp-14'
+        path: 'twrp'
+
+    - name: Clonar Ferramentas de Build do Android (Ação Oficial)
+      uses: actions/checkout@v4
+      with:
+        repository: 'minimal-manifest-twrp/platform_build'
+        ref: 'twrp-14'
+        path: 'twrp/build'
 
     - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
@@ -51,4 +56,3 @@ jobs:
       with:
         name: TWRP-MotoG86-Nice
         path: twrp/out/target/product/nice/*.img
-        
