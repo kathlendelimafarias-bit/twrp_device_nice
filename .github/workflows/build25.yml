@@ -11,7 +11,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Configurar Ambiente Linux
-      run: 
+      run: |
         sudo apt-get update
         sudo apt-get install -y gperf gcc-multilib g++-multilib libc6-dev libncurses5-dev libncursesw5-dev libx11-dev zlib1g-dev libxml2-utils xsltproc unzip bc bison build-essential ccache curl flex g++ rsync libssl-dev python3
 
