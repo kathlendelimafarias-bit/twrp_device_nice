@@ -26,9 +26,12 @@ jobs:
       
     - name: Clonar Código Fonte do TWRP (Modo Direto)
       run: |
-        # Ajustado de twrp-14.0 para twrp-14 (nome oficial do repositório deles)
-        git clone --depth=1 -b twrp-14 https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git twrp
-        
+        git clone --depth=1 -b twrp-14 https://github.com twrp
+
+    - name: Clonar Ferramentas de Build do Android
+      run: |
+        # Baixa os scripts de ambiente oficiais da ramificação do TWRP 14
+        git clone --depth=1 -b twrp-14 https://github.com twrp/build
 
     - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
