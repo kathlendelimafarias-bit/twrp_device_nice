@@ -23,11 +23,12 @@ jobs:
         remove-dotnet: 'true'
         remove-android: 'true'
         remove-haskell: 'true'
-
+      
     - name: Clonar Código Fonte do TWRP (Modo Direto)
       run: |
-        # Clonagem direta e rasa da branch estável de ferramentas sem depender de utilitários externos
-        git clone --depth=1 -b twrp-14.0 https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git twrp
+        # Ajustado de twrp-14.0 para twrp-14 (nome oficial do repositório deles)
+        git clone --depth=1 -b twrp-14 https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git twrp
+        
 
     - name: Clonar a Sua Device Tree
       uses: actions/checkout@v4
