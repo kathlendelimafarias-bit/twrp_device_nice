@@ -1,4 +1,4 @@
-# TWRP Device Tree for Motorola Moto G86 (nice)
+# TWRP Device Tree for Motorola Moto G86 and G86 Power (nice)
 
 This repository contains the TWRP device tree configuration for the **Motorola Moto G86 (nice)**, powered by the MediaTek MT6878 processor.
 
