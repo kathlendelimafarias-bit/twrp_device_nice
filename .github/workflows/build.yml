@@ -25,7 +25,7 @@ jobs:
       run: |
         mkdir -p ../twrp_base
         cd ../twrp_base
-        repo init --depth=1 -u https://github.com -b twrp-12.1
+        repo init --depth=1 -u https://github.com/lemk45/twrp_device_motorola_nice -b twrp-12.1
 
     - name: Sincronizar Código-Fonte (Download Pesado)
       run: |
