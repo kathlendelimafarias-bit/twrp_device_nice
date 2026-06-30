@@ -10,12 +10,13 @@ jobs:
     - name: Configurar Ambiente Linux
       run: |
         sudo apt-get update
-        sudo apt-get install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev python3
+        sudo apt-get install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev python3 python3-pip
 
     - name: Instalar a ferramenta Repo do Google
       run: |
         mkdir -p ~/bin
-        curl https://googleapis.com > ~/bin/repo
+        # Link oficial e direto atualizado para o binário do repo
+        curl https://googlesource.com | base64 --decode -> ~/bin/repo
         chmod a+x ~/bin/repo
         sudo ln -sf ~/bin/repo /usr/bin/repo
 
@@ -25,13 +26,13 @@ jobs:
         cd twrp
         git config --global user.name "Seu Nome"
         git config --global user.email "seu_email@exemplo.com"
-        # Usando a base unificada twrp-14 (compatível com árvores modernas de Android 14/15)
-        repo init --depth=1 -u https://github.com -b twrp-14
-        repo sync -j$(nproc)
+        # Usando o manifesto oficial do TWRP focado em bases modernas de 64-bit
+        repo init --depth=1 -u https://github.com -b twrp-12.1
+        repo sync -j$(nproc) --force-sync
 
     - name: Clonar sua Árvore de Dispositivos (Device Tree)
       run: |
-        # ATENÇÃO: Substitua o link abaixo pela URL real da sua árvore do "nice"
+        # ATENÇÃO: Altere para a URL real da sua árvore do "nice"
         git clone https://github.com twrp/device/motorola/nice
 
     - name: Executar a Compilação (.img)
@@ -45,5 +46,5 @@ jobs:
     - name: Salvar o arquivo .img gerado
       uses: actions/upload-artifact@v4
       with:
-        name: TWRP-Nice-Android15
+        name: TWRP-Nice-Final
         path: twrp/out/target/product/nice/recovery.img
