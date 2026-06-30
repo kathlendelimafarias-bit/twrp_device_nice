@@ -91,10 +91,10 @@ BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
 TARGET_NO_KERNEL_OVERRIDE := true
 
 # ==============================================================================
-# Módulos do Kernel (Organizados para carregar localmente no TWRP)
+# Módulos do Kernel (Desativado temporariamente por falta da pasta no repositório)
 # ==============================================================================
 TW_LOAD_VENDOR_MODULES_EXCLUDE_GKI := true
-TW_LOAD_VENDOR_MODULES := $(shell echo \"$(shell ls $(DEVICE_PATH)/prebuilt/vendor/lib/modules)\")
+TW_LOAD_VENDOR_MODULES := false
 
 # ==============================================================================
 # Partições e Armazenamento
@@ -158,11 +158,6 @@ TW_SUPPORT_INPUT_1_2 := true
 BOARD_USES_RECOVERY_AS_BOOT := false
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 TW_LOAD_VENDOR_BOOT_MODULES := true
-
-# Bootloader / Boot Control HAL
-PRODUCT_PACKAGES += \
-    android.hardware.boot@1.2-impl \
-    android.hardware.boot@1.2-service
 
 # Lista de partições para o sistema A/B de atualização do Recovery
 AB_OTA_UPDATER := true
