@@ -37,9 +37,8 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(DEVICE_PATH)/overlay
 
-================================================================================
-# PRODUCT_PACKAGES (HALs & Core Services extraídos do manifest/properties)
-================================================================================
+#===============================================================================
+# PRODUCT_PACKAGES
 
 # Boot Control HAL (Necessário para recuperação e atualizações A/B)
 PRODUCT_PACKAGES += \
