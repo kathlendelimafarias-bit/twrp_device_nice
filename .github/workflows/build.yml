@@ -1,7 +1,7 @@
-name: Compile TWRP
+name: Compilar TWRP
 
 on:
-  workflow_dispatch: # Permite ativar a compilação manualmente com um clique
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,7 +14,7 @@ jobs:
 
     - name: Instalar a ferramenta Repo do Google
       run: |
-        mkdir -y ~/bin
+        mkdir -p ~/bin
         curl https://googleapis.com > ~/bin/repo
         chmod a+x ~/bin/repo
         sudo ln -sf ~/bin/repo /usr/bin/repo
@@ -23,15 +23,15 @@ jobs:
       run: |
         mkdir twrp
         cd twrp
-        git config --global user.name "lemki_25"
-        git config --global user.email "kathlendelimafarias-bit"
-        # Inicializa o manifesto do TWRP (exemplo com a versão 11)
-        repo init --depth=1 -u https://github.com -b twrp-11
-        repo sync  -j$(nproc)
+        git config --global user.name "Seu Nome"
+        git config --global user.email "seu_email@exemplo.com"
+        # Usando a base unificada twrp-14 (compatível com árvores modernas de Android 14/15)
+        repo init --depth=1 -u https://github.com -b twrp-14
+        repo sync -j$(nproc)
 
     - name: Clonar sua Árvore de Dispositivos (Device Tree)
       run: |
-        # Substitua pelo link e caminho da sua árvore
+        # ATENÇÃO: Substitua o link abaixo pela URL real da sua árvore do "nice"
         git clone https://github.com twrp/device/motorola/nice
 
     - name: Executar a Compilação (.img)
@@ -39,12 +39,11 @@ jobs:
         cd twrp
         export ALLOW_MISSING_DEPENDENCIES=true
         source build/envsetup.sh
-        # Substitua 'modelo' pelo codinome do seu aparelho (ex: lunch twrp_vince-eng)
         lunch twrp_nice-eng 
         make recoveryimage -j$(nproc)
 
     - name: Salvar o arquivo .img gerado
       uses: actions/upload-artifact@v4
       with:
-        name: TWRP-Compilado
-        path: twrp/out/target/product/*/recovery.img
+        name: TWRP-Nice-Android15
+        path: twrp/out/target/product/nice/recovery.img
