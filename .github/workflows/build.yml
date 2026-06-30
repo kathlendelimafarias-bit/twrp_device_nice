@@ -1,0 +1,50 @@
+name: Compile TWRP
+
+on:
+  workflow_dispatch: # Permite ativar a compilação manualmente com um clique
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Configurar Ambiente Linux
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev python3
+
+    - name: Instalar a ferramenta Repo do Google
+      run: |
+        mkdir -y ~/bin
+        curl https://googleapis.com > ~/bin/repo
+        chmod a+x ~/bin/repo
+        sudo ln -sf ~/bin/repo /usr/bin/repo
+
+    - name: Sincronizar Código-Fonte do TWRP
+      run: |
+        mkdir twrp
+        cd twrp
+        git config --global user.name "lemki_25"
+        git config --global user.email "kathlendelimafarias-bit"
+        # Inicializa o manifesto do TWRP (exemplo com a versão 11)
+        repo init --depth=1 -u https://github.com -b twrp-11
+        repo sync  -j$(nproc)
+
+    - name: Clonar sua Árvore de Dispositivos (Device Tree)
+      run: |
+        # Substitua pelo link e caminho da sua árvore
+        git clone https://github.com twrp/device/motorola/nice
+
+    - name: Executar a Compilação (.img)
+      run: |
+        cd twrp
+        export ALLOW_MISSING_DEPENDENCIES=true
+        source build/envsetup.sh
+        # Substitua 'modelo' pelo codinome do seu aparelho (ex: lunch twrp_vince-eng)
+        lunch twrp_nice-eng 
+        make recoveryimage -j$(nproc)
+
+    - name: Salvar o arquivo .img gerado
+      uses: actions/upload-artifact@v4
+      with:
+        name: TWRP-Compilado
+        path: twrp/out/target/product/*/recovery.img
