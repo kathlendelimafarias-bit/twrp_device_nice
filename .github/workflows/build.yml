@@ -27,8 +27,8 @@ jobs:
       run: |
         mkdir -p ../twrp_base
         cd ../twrp_base
-        git config --global user.name "Seu Nome"
-        git config --global user.email "seu_email@exemplo.com"
+        git config --global user.name "lemki_25"
+        git config --global user.email "kathlendelimafarias-bit"
         repo init --depth=1 -u https://github.com -b twrp-12.1 || exit 1
         repo sync -j$(nproc) --force-sync || exit 1
 
