@@ -152,11 +152,17 @@ TW_Y_OFFSET := 95
 TW_H_OFFSET := -95
 TW_INCLUDE_PYTHON := true
 TW_SUPPORT_INPUT_1_2 := true
+TW_INCLUDE_CRYPTO:= true
+TW_INCLUDE_CRYPTO_FBE := true
 
 # Ramdisk Ramificações A/B
 BOARD_USES_RECOVERY_AS_BOOT := false
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 TW_LOAD_VENDOR_BOOT_MODULES := true
+PRODUCT_PACKAGES += \
+    android.hardware.gatekeeper@1.0-service \
+    android.hardware.keymaster@4.0-service.mdfpp
 
 # Lista de partições para o sistema A/B de atualização do Recovery
 AB_OTA_UPDATER := true
