@@ -34,7 +34,7 @@ jobs:
         mkdir -p ../twrp_base
         cd ../twrp_base
         # Usando a URL oficial estável do repositório minimal do TWRP
-        repo init --depth=1 --no-repo-verify -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-14
+        repo init --depth=1 --no-repo-verify -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
 
     - name: Sincronizar Código-Fonte (Download Pesado)
       run: |
@@ -49,12 +49,11 @@ jobs:
     - name: Executar a Compilação (.img)
       run: |
         cd ../twrp_base
-        sed -i 's/$(error No release config found for TARGET_RELEASE:$(TARGET_RELEASE). Available releases are: $(AVAILABLE_RELEASES))/$(warning Ignorando checagem de release)/g' build/make/core/ release_config.mk
         export BUILD_BROKEN_MISSING_OUTPUTS=true
         export ALLOW_MISSING_DEPENDENCIES=true
         export DISABLE_RELEASE_CONFIG_VALIDATION=true
         source build/envsetup.sh
-        lunch twrp_nice-trunk_staging-userdebug
+        lunch twrp_nice-eng
         mka recoveryimage -j$(nproc)
 
     - name: Salvar o arquivo .img gerado
