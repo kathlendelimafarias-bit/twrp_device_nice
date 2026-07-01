@@ -72,8 +72,14 @@ BOARD_DTB_OFFSET := 0x07C88000
 BOARD_KERNEL_CMDLINE := root=/dev/ram nosoftlockup 8250.nr_uarts=3 vmalloc=400M swiotlb=noforce transparent_hugepage=never cgroup.memory=nosocket,nokmem disable_dma32=on firmware_class.path=/vendor/firmware gpt=1 loop.max_part=7 ufshcd_core.poll_queues=0 usb2jtag_mode=0 bootopt=64S3,32N2,64N2 bootconfig
 BOARD_VENDOR_CMDLINE := bootopt=64S3,32N2,64N2
 
+# Definições nativas de Imagens Prebuilt do Kernel, DTB e DTBO
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
+BOARD_PREBUILT_DTBIMAGE := $(DEVICE_PATH)/prebuilt/dtb.img
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
+TARGET_NO_KERNEL_OVERRIDE := true
+
 # Boot assembly arguments
-BOARD_MKBOOTIMG_ARGS += --dtb $(DEVICE_PATH)/prebuilt/dtb.img
+BOARD_MKBOOTIMG_ARGS += --dtb $(BOARD_PREBUILT_DTBIMAGE)
 BOARD_MKBOOTIMG_ARGS += --vendor_cmdline $(BOARD_VENDOR_CMDLINE)
 BOARD_MKBOOTIMG_ARGS += --pagesize $(BOARD_PAGE_SIZE) --board ""
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
@@ -81,12 +87,6 @@ BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_TAGS_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
-
-# Imagens Prebuilt do Kernel, DTB e DTBO (Apontando para a sua pasta prebuilt)
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel:out/target/product/nice/kernel \
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img:out/target/product/nice/dtb.img
-BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
-TARGET_NO_KERNEL_OVERRIDE := true
 
 # ==============================================================================
 # Módulos do Kernel (Desativado temporariamente por falta da pasta no repositório)
