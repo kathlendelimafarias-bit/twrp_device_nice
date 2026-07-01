@@ -61,4 +61,4 @@ jobs:
       with:
        name: TWRP-Nice-Final
        path: /home/runner/work/twrp_device_motorola_nice/twrp_base/out/target/product/nice/*.img
-       if-no-files-found: error
+       if-no-files-found: warn
