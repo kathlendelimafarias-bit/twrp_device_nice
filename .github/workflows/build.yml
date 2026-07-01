@@ -56,9 +56,9 @@ jobs:
         lunch twrp_nice-eng
         mka recoveryimage -j$(nproc)
 
-          - name: Salvar o arquivo .img gerado
-        uses: actions/upload-artifact@v4
-        with:
-          name: TWRP-Nice-Final
-          path: ${{ github.workspace }}/../twrp_base/out/target/product/nice/*.img
-          if-no-files-found: error
+    - name: Salvar o arquivo .img gerado
+      uses: actions/upload-artifact@v4
+      with:
+       name: TWRP-Nice-Final
+       path: ./*.img
+       if-no-files-found: error
