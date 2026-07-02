@@ -58,7 +58,7 @@ jobs:
         source build/envsetup.sh
         
         # Se ele exigir 3 partes no Android 14, o padrão oficial é 'trunk_staging'
-        lunch twrp_nice-ap2a-eng
+        lunch twrp_nice-eng
         mkdir -p out/target/product/nice
         cp device/motorola/nice/prebuilt/kernel out/target/product/nice/kernel
         cp device/motorola/nice/prebuilt/dtb.img out/target/product/nice/dtb.img
