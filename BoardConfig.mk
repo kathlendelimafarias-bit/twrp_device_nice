@@ -50,17 +50,16 @@ BOARD_HAS_MMI_ECOMPASS := true  # E-compass
 BOARD_HAS_MMI_NFC := esim_st    # STMicroelectronics NFC / eSIM stub
 
 # ==============================================================================
-# Kernel Configuration & Bootargs
+# Kernel Configuration & Bootargs (Desativado GKI para Boot.img Tradicional)
 # ==============================================================================
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 BOARD_RAMDISK_USE_LZ4 := true
-BOARD_BOOT_HEADER_VERSION := 4
-BOARD_INIT_BOOT_HEADER_VERSION := 4
+BOARD_BOOT_HEADER_VERSION := 2  # Versão 2 é a ideal para conter Kernel + Ramdisk + DTB unificados na boot.img tradicional
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_KERNEL_SEPARATED_DTBO := true
 BOARD_KERNEL_IMAGE_NAME := Image.gz
-BOARD_USES_GENERIC_KERNEL_IMAGE := true
+BOARD_USES_GENERIC_KERNEL_IMAGE := false # <--- Desativado para forçar a árvore legada
 
 # Endereçamentos corrigidos com base no log do hardware (MediaTek)
 BOARD_KERNEL_BASE := 0x40000000
@@ -71,8 +70,7 @@ BOARD_TAGS_OFFSET := 0x07C88000
 BOARD_DTB_OFFSET := 0x07C88000
 
 # Linha de comando do Kernel (Bootargs unificados)
-BOARD_KERNEL_CMDLINE := root=/dev/ram nosoftlockup 8250.nr_uarts=3 vmalloc=400M swiotlb=noforce transparent_hugepage=never cgroup.memory=nosocket,nokmem disable_dma32=on firmware_class.path=/vendor/firmware gpt=1 loop.max_part=7 ufshcd_core.poll_queues=0 usb2jtag_mode=0 bootopt=64S3,32N2,64N2 bootconfig
-BOARD_VENDOR_CMDLINE := bootopt=64S3,32N2,64N2
+BOARD_KERNEL_CMDLINE := root=/dev/ram nosoftlockup 8250.nr_uarts=3 vmalloc=400M swiotlb=noforce transparent_hugepage=never cgroup.memory=nosocket,nokmem disable_dma32=on firmware_class.path=/vendor/firmware gpt=1 loop.max_part=7 ufshcd_core.poll_queues=0 usb2jtag_mode=0 bootopt=64S3,32N2,64N2
 
 # Definições nativas de Imagens Prebuilt do Kernel, DTB e DTBO
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
@@ -83,7 +81,6 @@ TARGET_NO_KERNEL_OVERRIDE := true
 
 # Boot assembly arguments
 BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
-BOARD_MKBOOTIMG_ARGS += --vendor_cmdline $(BOARD_VENDOR_CMDLINE)
 BOARD_MKBOOTIMG_ARGS += --pagesize $(BOARD_PAGE_SIZE) --board ""
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
@@ -92,7 +89,7 @@ BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
 
 # ==============================================================================
-# Módulos do Kernel e Drivers (Essencial para não dar bootloop)
+# Módulos do Kernel e Drivers
 # ==============================================================================
 TW_LOAD_VENDOR_MODULES_EXCLUDE_GKI := true
 TW_LOAD_VENDOR_MODULES := $(shell echo \"$(shell ls $(DEVICE_PATH)/recovery/root/vendor/lib/modules)\")
@@ -100,10 +97,8 @@ TW_LOAD_VENDOR_MODULES := $(shell echo \"$(shell ls $(DEVICE_PATH)/recovery/root
 # ==============================================================================
 # Partições e Armazenamento
 # ==============================================================================
-# Bloco Flash adaptado para paginação moderna (BOARD_KERNEL_PAGESIZE * 64)
 BOARD_FLASH_BLOCK_SIZE := 262144
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
-BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_HAS_LARGE_FILESYSTEM := true
 
 # Sistemas de arquivos dinâmicos (O TWRP lida com EXT4/EROFS via recovery.fstab)
@@ -141,10 +136,10 @@ TARGET_RECOVERY_DEVICE_MODULES += init.recovery.mt6878.rc
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 
-# Ignorar travas de Anti-Rollback para o Recovery rodar livre
+# Ajustado Platform para a base do Android 12L estável do TWRP 12.1
 PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := 2099-12-31
-PLATFORM_VERSION := 16.1.0
+PLATFORM_VERSION := 12.1.0
 
 # ==============================================================================
 # TWRP Interface / Recursos Customizados e Criptografia
@@ -172,16 +167,15 @@ TW_INCLUDE_LOGCAT := true
 TW_USES_LOGD := true
 
 # ==============================================================================
-# Ramdisk Ramificações A/B e Vendor Boot
+# Configuração Clássica de Ramdisk: Forçar Recovery dentro da Boot.img
 # ==============================================================================
-BOARD_USES_RECOVERY_AS_BOOT := false
-BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
-BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
-TW_LOAD_VENDOR_BOOT_MODULES := true
-BOARD_CUSTOM_INIT_BOOT_IMAGE := true
-BOARD_INIT_BOOTIMAGE_PARTITION_SIZE := 8388608
+BOARD_USES_RECOVERY_AS_BOOT := true             # Diz ao compilador que a ramdisk da boot.img é o próprio TWRP
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := false
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := false
+TW_LOAD_VENDOR_BOOT_MODULES := false
+BOARD_CUSTOM_INIT_BOOT_IMAGE := false
 
-# Lista de partições para o sistema A/B de atualização do Recovery
+# Lista de partições A/B limpa de amarras do GKI do Android 14
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS += \
     system \
@@ -189,8 +183,6 @@ AB_OTA_PARTITIONS += \
     vendor \
     product \
     boot \
-    init_boot \
-    vendor_boot \
     dtbo \
     vbmeta \
     vbmeta_system \
