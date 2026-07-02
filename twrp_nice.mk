@@ -3,6 +3,9 @@
 # Device configuration for Motorola mt6878 (nice)
 #
 
+# Configure core_64_bit.mk (Herdado logo no topo para evitar bugs de arquitetura)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+
 # Device identifier
 PRODUCT_DEVICE := nice
 PRODUCT_NAME := twrp_nice
@@ -23,16 +26,9 @@ $(call inherit-product, vendor/twrp/config/common.mk)
 # Configure emulated_storage.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-# Configure launch_with_vendor_ramdisk.mk
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
-
 # Configure base.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 
-# Configure core_64_bit.mk (Garante a herança correta de bibliotecas de execução)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-
-# FUSE passthrough & TWRP Flags
+# FUSE passthrough & Propriedades específicas do TWRP
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.twrp.vendor_boot=true \
     persist.sys.fuse.passthrough.enable=true
