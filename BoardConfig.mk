@@ -54,7 +54,7 @@ BOARD_HAS_MMI_NFC := esim_st    # STMicroelectronics NFC / eSIM stub
 # ==============================================================================
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
-BOARD_RAMDISK_USE_LZ4 := true
+BOARD_RAMDISK_USE_GZIP := true
 BOARD_BOOT_HEADER_VERSION := 2  # Versão 2 é a ideal para conter Kernel + Ramdisk + DTB unificados na boot.img tradicional
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_KERNEL_SEPARATED_DTBO := true
