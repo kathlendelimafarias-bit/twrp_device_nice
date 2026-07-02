@@ -68,5 +68,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
        name: TWRP-Nice-Final
-       path: /home/runner/work/twrp_device_motorola_nice/twrp_base/out/target/product/nice/vendor_boot.img
+       path: /home/runner/work/twrp_device_motorola_nice/twrp_base/out/target/product/nice/boot.img
        if-no-files-found: warn
